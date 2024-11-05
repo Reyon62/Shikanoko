@@ -1,5 +1,4 @@
-use rand::thread_rng;
-use rand::Rng;
+use rand::{Rng, thread_rng};
 
 #[derive(Clone)]
 struct AutoMaton<'a> {
@@ -37,8 +36,10 @@ impl Iterator for AutoMaton<'static> {
                 if rng.gen_bool(1.0/2.0) {
                     self.cur = "の";
                 } else if thread_rng().gen_bool(1.0/2.0) {
+                    /* p = 1.0 / 4.0 */
                     self.cur = "し"
                 }
+                /* p = 1.0 / 4.0: self.cur = ”こ” */
             },
             "た" => {
                 self.cur = "ん";
@@ -59,6 +60,7 @@ impl Iterator for AutoMaton<'static> {
                 unreachable!();
             }
         }
+
         return Some(self.clone());
     }
 }
@@ -66,8 +68,8 @@ impl Iterator for AutoMaton<'static> {
 fn main() {
     let mut buf = String::new();
     let auto = AutoMaton::new();
-    const TARGET_STR:&str = "しかのこのこのここしたんたん　";
-    print!("{}", auto.cur);
+    const TARGET_STR:&str = "しかのこのこのここしたんたん　　";
+    print!("ぬん！{}", auto.cur);
 
     /* markov chain!!! */
     for a in auto {
